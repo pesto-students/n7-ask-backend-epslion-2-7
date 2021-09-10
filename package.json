@@ -1,0 +1,30 @@
+{
+  "name": "n7-ask-backend-epslion-2-7",
+  "version": "1.0.0",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "jsonwebtoken": "^8.5.1",
+    "mysql": "^2.18.1",
+    "mysql2": "^2.3.0",
+    "sequelize": "^6.6.5"
+  },
+  "description": "",
+  "main": "index.js",
+  "devDependencies": {
+    "prettier": "^2.4.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pesto-students/n7-ask-backend-epslion-2-7.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pesto-students/n7-ask-backend-epslion-2-7/issues"
+  },
+  "homepage": "https://github.com/pesto-students/n7-ask-backend-epslion-2-7#readme"
+}

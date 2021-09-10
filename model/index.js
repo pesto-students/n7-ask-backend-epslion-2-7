@@ -1,0 +1,9 @@
+const dbConfig = require("../service/database");
+const Sequelize = require("sequelize");
+const db = {};
+db.Sequelize = Sequelize;
+db.sequelize = dbConfig;
+db.userModel = require("./users.model")(dbConfig, Sequelize);
+db.interestModel = require("./interests.model")(dbConfig, Sequelize);
+db.userInterestModel = require("./users_interest.model")(dbConfig, Sequelize);
+module.exports = db;

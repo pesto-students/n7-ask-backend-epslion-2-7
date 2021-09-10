@@ -1,0 +1,83 @@
+# Welcome to Serverless!
+#
+# This file is the main config file for your service.
+# It's very minimal at this point and uses default values.
+# You can always add more config options for more control.
+# We've included some commented out config examples here.
+# Just uncomment any of them to get that config option.
+#
+# For full config options, check the docs:
+#    docs.serverless.com
+#
+# Happy Coding!
+
+service: lambda-epsilon-signup-signin
+
+frameworkVersion: "2"
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  lambdaHashingVersion: 20201221
+  region: ap-south-1
+
+  # you can define service wide environment variables here
+  environment:
+    SECRET_KEY: ${file(./envVariables.json):SECRET_KEY}
+    RDS_DB: ${file(./envVariables.json):RDS_DB}
+    RDS_PORT: ${file(./envVariables.json):RDS_PORT}
+    RDS_USERNAME: ${file(./envVariables.json):RDS_USERNAME}
+    RDS_PASSWORD: ${file(./envVariables.json):RDS_PASSWORD}
+    RDS_HOSTNAME: ${file(./envVariables.json):RDS_HOSTNAME}
+
+functions:
+  userCreate:
+    handler: index.userCreate
+    events:
+      - httpApi:
+          path: /users
+          method: post
+
+  userUpdate:
+    handler: index.userUpdate
+    events:
+      - httpApi:
+          path: /users
+          method: patch
+
+  userGet:
+    handler: index.userGet
+    events:
+      - httpApi:
+          path: /users
+          method: get
+
+  login:
+    handler: index.login
+    events:
+      - httpApi:
+          path: /login
+          method: post
+
+  interests:
+    handler: index.interests
+    events:
+      - httpApi:
+          path: /interests
+          method: post
+
+  resetPassword:
+    handler: index.resetPassword
+    events:
+      - httpApi:
+          path: /resetpassword
+          method: post
+
+  authentication:
+    handler: index.authentication
+
+
+#          request:
+#            parameters:
+#              paths:
+#                id: true
