@@ -7,7 +7,7 @@ class AuthController {
    * @param req
    * @return object : isAuthorized: true, context: tokenData,
    */
-  static authentication = async (req) => {
+  static authentication = (req) => {
     try {
       const token = req.headers.authorization.split(" ")[1];
       const tokenData = verifyToken(token);
@@ -18,7 +18,7 @@ class AuthController {
     } catch (error) {
       return {
         isAuthorized: false,
-        context: "invalid Credentials",
+        context: "Invalid Credentials",
       };
     }
   };
