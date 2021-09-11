@@ -7,6 +7,11 @@ const {
   updateUserDetails,
 } = require("./controller/user.controller");
 const { addUserInterests } = require("./controller/interest.controller");
+const { addQuestions } = require("./controller/questions.controller");
+const { addAnswer } = require("./controller/answers.controller");
+const { addComments } = require("./controller/comments.controller");
+const { toggleLike } = require("./controller/like.controller");
+const { increaseViewCount } = require("./controller/view.controller");
 const { authentication: auth } = require("./controller/auth.controller");
 
 module.exports.userGet = async function (event) {
@@ -34,5 +39,25 @@ module.exports.interests = async function (event) {
 };
 
 module.exports.authentication = async function (event) {
-  return await auth(event);
+  return auth(event);
+};
+
+module.exports.questionCreate = async function (event) {
+  return await addQuestions(event);
+};
+
+module.exports.view = async function (event) {
+  return await increaseViewCount(event);
+};
+
+module.exports.like = async function (event) {
+  return await toggleLike(event);
+};
+
+module.exports.comment = async function (event) {
+  return await addComments(event);
+};
+
+module.exports.answer = async function (event) {
+  return await addAnswer(event);
 };

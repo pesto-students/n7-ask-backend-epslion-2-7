@@ -9,7 +9,7 @@ module.exports = (sql, Sequelize) => {
         primaryKey: true,
         type: Sequelize.NUMBER,
       },
-      user_id: {
+      userId: {
         type: Sequelize.NUMBER,
         allowNull: false,
         references: {
@@ -17,7 +17,7 @@ module.exports = (sql, Sequelize) => {
           key: "id",
         },
       },
-      interest_id: {
+      interestId: {
         type: Sequelize.NUMBER,
         allowNull: false,
         references: {
