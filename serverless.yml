@@ -35,21 +35,21 @@ functions:
     handler: index.userCreate
     events:
       - httpApi:
-          path: /users
+          path: /user
           method: post
 
   userUpdate:
     handler: index.userUpdate
     events:
       - httpApi:
-          path: /users
+          path: /user
           method: patch
 
   userGet:
     handler: index.userGet
     events:
       - httpApi:
-          path: /users
+          path: /user
           method: get
 
   login:
@@ -71,6 +71,40 @@ functions:
     events:
       - httpApi:
           path: /resetpassword
+          method: post
+
+  questionCreate:
+    handler: index.questionCreate
+    events:
+      - httpApi:
+          path: /question
+          method: post
+
+  view:
+    handler: index.view
+    events:
+      - httpApi:
+          path: /view
+          method: post
+  like:
+    handler: index.like
+    events:
+      - httpApi:
+          path: /like
+          method: post
+
+  answer:
+    handler: index.answer
+    events:
+      - httpApi:
+          path: /answer
+          method: post
+
+  comment:
+    handler: index.comment
+    events:
+      - httpApi:
+          path: /comment
           method: post
 
   authentication:

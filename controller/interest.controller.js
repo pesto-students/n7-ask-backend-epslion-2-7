@@ -21,8 +21,8 @@ class InterestController {
         );
       }
       let selectedInterest = requestBody.map((val) => ({
-        user_id: id,
-        interest_id: val,
+        userId: id,
+        interestId: val,
       }));
       const interestDetails = await userInterestModel.bulkCreate(
         selectedInterest
