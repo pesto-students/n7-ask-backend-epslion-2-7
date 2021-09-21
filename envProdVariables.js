@@ -1,9 +1,9 @@
-{
-
-  "SECRET_KEY": "Ask",
-  "RDS_DB": "Ask",
-  "RDS_PORT": "3306",
-  "RDS_USERNAME": process.,
-  "RDS_PASSWORD": "admin007",
-  "RDS_HOSTNAME": "ask-1.cthdmx0yvc9b.ap-south-1.rds.amazonaws.com"
-}
+require("dotenv").config();
+const variables = {
+  SECRET_KEY: process.env.SECRET_KEY,
+  RDS_DB: process.env.RDS_DB,
+  RDS_PORT: process.env.RDS_PORT,
+  RDS_USERNAME: process.env.RDS_PORT,
+  RDS_PASSWORD: process.env.RDS_PORT,
+  RDS_HOSTNAME: process.env.RDS_PORT,
+};
