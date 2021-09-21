@@ -1,4 +1,4 @@
-const { answers} = require("../model/index");
+const { answers, comments} = require("../model/index");
 const responseTemplate = require("../util/responseTemplate");
 
 class AnswersController {
@@ -38,6 +38,30 @@ class AnswersController {
             return responseTemplate(400, false, ` ${error.message}`, []);
         }
     };
+
+    /**
+     * @method
+     * @description here user will get answers for questions
+     * @return object : Http response
+     * @param req
+     */
+    static getAnswers = async (req) => {
+        try {
+            const questionId = req.pathParameters.id
+            const answerData = await answers.findAll({
+                where:{
+                    questionId
+                },
+                order: [
+                    ['createdAt', 'DESC'],
+                ],
+            });
+            return responseTemplate(200, true, "Answer Added", answerData);
+        } catch (error) {
+            return responseTemplate(400, false, ` ${error.message}`, []);
+        }
+    };
+
 }
 
 module.exports = AnswersController;

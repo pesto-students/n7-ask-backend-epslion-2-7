@@ -12,7 +12,6 @@ class ViewController {
         try {
             const id = req.requestContext.authorizer.lambda.id;
             const { typeId, type, } = JSON.parse(req.body);
-
             const viewRow = await views.findAll({
                 where: {
                     typeId,
@@ -20,12 +19,7 @@ class ViewController {
             });
             if (viewRow.length > 0) {
                 return views
-                    .update(
-                        {
-                            views: viewRow[0].views + 1,
-                        },
-                        { where: { typeId } }
-                    )
+                    .increment('views', { by: 1, where: { typeId}})
                     .then((success) => {
                         return responseTemplate(200, true, "Data Update", success);
                     })
