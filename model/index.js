@@ -10,5 +10,20 @@ db.questions = require("./questions.model")(dbConfig, Sequelize);
 db.answers = require("./answers.model")(dbConfig, Sequelize);
 db.likes = require("./likes.model")(dbConfig, Sequelize);
 db.comments = require("./comments.model")(dbConfig, Sequelize);
+db.questionsInterest = require("./questionsInterest.model")(dbConfig, Sequelize);
 db.views = require("./views.model")(dbConfig, Sequelize);
+
+db.questions.belongsTo(db.userModel, {foreignKey: 'userId', targetKey: 'id'})
+db.userInterestModel.belongsTo(db.userModel, {foreignKey: 'userId', targetKey: 'id'})
+db.userInterestModel.belongsTo(db.interestModel, {foreignKey: 'interestId', targetKey: 'id'})
+
+db.questions.belongsToMany(db.interestModel, {
+    through: "questions_interests",
+    foreignKey: "questionId",
+});
+db.interestModel.belongsToMany(db.questions, {
+    through: "questions_interests",
+    foreignKey: "interestId",
+});
+
 module.exports = db;

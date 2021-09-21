@@ -23,12 +23,19 @@ provider:
 
   # you can define service wide environment variables here
   environment:
-    SECRET_KEY: ${file(./envVariables.json):SECRET_KEY}
-    RDS_DB: ${file(./envVariables.json):RDS_DB}
-    RDS_PORT: ${file(./envVariables.json):RDS_PORT}
-    RDS_USERNAME: ${file(./envVariables.json):RDS_USERNAME}
-    RDS_PASSWORD: ${file(./envVariables.json):RDS_PASSWORD}
-    RDS_HOSTNAME: ${file(./envVariables.json):RDS_HOSTNAME}
+#    SECRET_KEY: ${file(./envVariables.json):SECRET_KEY}
+#    RDS_DB: ${file(./envVariables.json):RDS_DB}
+#    RDS_PORT: ${file(./envVariables.json):RDS_PORT}
+#    RDS_USERNAME: ${file(./envVariables.json):RDS_USERNAME}
+#    RDS_PASSWORD: ${file(./envVariables.json):RDS_PASSWORD}
+#    RDS_HOSTNAME: ${file(./envVariables.json):RDS_HOSTNAME}
+
+    SECRET_KEY: ${file(./envDevVariables.json):SECRET_KEY}
+    RDS_DB: ${file(./envDevVariables.json):RDS_DB}
+    RDS_PORT: ${file(./envDevVariables.json):RDS_PORT}
+    RDS_USERNAME: ${file(./envDevVariables.json):RDS_USERNAME}
+    RDS_PASSWORD: ${file(./envDevVariables.json):RDS_PASSWORD}
+    RDS_HOSTNAME: ${file(./envDevVariables.json):RDS_HOSTNAME}
 
 functions:
   userCreate:
@@ -93,19 +100,48 @@ functions:
           path: /like
           method: post
 
-  answer:
-    handler: index.answer
+  CreateAnswer:
+    handler: index.createAnswer
     events:
       - httpApi:
           path: /answer
           method: post
 
-  comment:
-    handler: index.comment
+  GetAnswer:
+    handler: index.getAnswers
+    events:
+      - httpApi:
+          path: /answers/{questionId}
+          method: get
+          request:
+            parameters:
+              paths:
+                questionId: true
+
+  CreateComment:
+    handler: index.createComment
     events:
       - httpApi:
           path: /comment
           method: post
+
+  GetComment:
+    handler: index.getComment
+    events:
+      - httpApi:
+          path: /comments/{id}
+          method: get
+          request:
+            parameters:
+              paths:
+                id: true
+
+  userFeed:
+    handler: index.userFeed
+    events:
+      - httpApi:
+          path: /feed
+          method: get
 
   authentication:
     handler: index.authentication

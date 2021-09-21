@@ -17,6 +17,9 @@ module.exports = (sql, Sequelize) => {
       image: {
         type: Sequelize.STRING,
       },
+      followers: {
+        type: Sequelize.NUMBER,
+      },
       createdAt: {
         type: Sequelize.DATE,
       },

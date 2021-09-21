@@ -8,10 +8,11 @@ const {
 } = require("./controller/user.controller");
 const { addUserInterests } = require("./controller/interest.controller");
 const { addQuestions } = require("./controller/questions.controller");
-const { addAnswer } = require("./controller/answers.controller");
-const { addComments } = require("./controller/comments.controller");
+const { addAnswer,getAnswers:getAns } = require("./controller/answers.controller");
+const { addComments,getComments } = require("./controller/comments.controller");
 const { toggleLike } = require("./controller/like.controller");
 const { increaseViewCount } = require("./controller/view.controller");
+const { getFeed } = require("./controller/feed.controller");
 const { authentication: auth } = require("./controller/auth.controller");
 
 module.exports.userGet = async function (event) {
@@ -54,10 +55,22 @@ module.exports.like = async function (event) {
   return await toggleLike(event);
 };
 
-module.exports.comment = async function (event) {
+module.exports.createComment = async function (event) {
   return await addComments(event);
 };
 
-module.exports.answer = async function (event) {
+module.exports.getComment = async function (event) {
+  return await getComments(event);
+};
+
+module.exports.createAnswer = async function (event) {
   return await addAnswer(event);
+};
+
+module.exports.getAnswers = async function (event) {
+  return await getAns(event);
+};
+
+module.exports.userFeed = async function (event) {
+  return await getFeed(event);
 };

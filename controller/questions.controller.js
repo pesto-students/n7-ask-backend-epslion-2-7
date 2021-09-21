@@ -11,25 +11,19 @@ class QuestionsController {
   static addQuestions = async (req) => {
     try {
       const id = req.requestContext.authorizer.lambda.id;
-      const {question} = JSON.parse(req.body);
+      const { question } = JSON.parse(req.body);
       const questionData = await questions.build({
         userId: id,
         question,
       });
-      try{
+      try {
         await questionData.validate();
-      }
-      catch (error){
+      } catch (error) {
         let errorResponse = error.errors.map((val) => ({
           field: val.path,
           message: val.message,
         }));
-        return responseTemplate(
-            400,
-            false,
-            ` ${error.message}`,
-            errorResponse
-        );
+        return responseTemplate(400, false, ` ${error.message}`, errorResponse);
       }
       await questionData.save();
       return responseTemplate(200, true, "Question Added", questionData);

@@ -20,9 +20,9 @@ module.exports = (sql, Sequelize) => {
       validate: {
         isIn: {
           args: [["question", "answer", "comment"]],
-          msg: " Type must be question, answer or comment "
-        }
-      }
+          msg: " Type must be question, answer or comment ",
+        },
+      },
     },
     typeId: {
       type: Sequelize.NUMBER,
@@ -33,4 +33,3 @@ module.exports = (sql, Sequelize) => {
     },
   });
 };
-

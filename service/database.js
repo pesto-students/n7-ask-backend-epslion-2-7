@@ -8,6 +8,9 @@ const sequelize = new Sequelize(
     dialect: "mysql",
     host: process.env.RDS_HOSTNAME,
     port: process.env.RDS_PORT,
-  }
+    dialectOptions: {
+      multipleStatements: true,
+    },
+  },
 );
 module.exports = sequelize;
