@@ -157,7 +157,14 @@ functions:
           request:
             querystrings:
               q: true
+              page: true
 
+  reputation:
+    handler: index.reputation
+    events:
+      - httpApi:
+          path: /reputation
+          method: post
 
   authentication:
     handler: index.authentication
