@@ -10,6 +10,7 @@ const {
   views,
 } = require("../model/index");
 const responseTemplate = require("../util/responseTemplate");
+const randomize = require("../util/randomSort");
 
 class FeedController {
   /**
@@ -20,10 +21,93 @@ class FeedController {
    */
   static getFeed = async (req) => {
     try {
-      const id = req.requestContext.authorizer.lambda.id;
+      const query = req.queryStringParameters;
+      let params = {
+        page: 1,
+        filter: null,
+        interests: null,
+      };
+      if (query.hasOwnProperty("page")) params.page = query.page;
+      if (query.hasOwnProperty("filter")) params.filter = query.filter;
+      if (query.hasOwnProperty("interests")) params.interests = query.interests;
+      let allInterests = await this.interestFilter(params, req);
+      const questionObject = await questions.findAll({
+        offset: (params.page - 1) * 10,
+        limit: 10,
+        include: [
+          {
+            model: interestModel,
+            attributes: ["id", "name"],
+            where: {
+              id: allInterests,
+            },
+          },
+          {
+            model: userModel,
+            attributes: ["id", "name", "profilePic"],
+          },
+        ],
+      });
+
+      let feedData = [];
+      for (let i = 0; i < questionObject.length; i++) {
+        let localQuestion = {};
+        localQuestion.id = questionObject[i].id;
+        localQuestion.question = questionObject[i].question;
+        localQuestion.userId = questionObject[i].user.id;
+        localQuestion.userName = questionObject[i].user.name;
+        localQuestion.profilePic = questionObject[i].user.profilePic;
+        localQuestion.interests = questionObject[i].interests.map((val) => ({
+          id: val.id,
+          name: val.name,
+        }));
+        const meta = await this.metaData(questionObject[i]);
+        localQuestion = { ...localQuestion, ...meta };
+        feedData.push(localQuestion);
+      }
+
+      if (params.filter) {
+        let filter = params.filter;
+        switch (filter) {
+          case "like":
+            feedData = feedData.sort((a, b) => a.likes - b.likes);
+            break;
+          case "views":
+            feedData = feedData.sort((a, b) => a.views - b.views);
+            break;
+        }
+      }
+      return responseTemplate(200, true, "user Feed", feedData);
+    } catch (error) {
+      return responseTemplate(400, false, error.message, []);
+    }
+  };
+
+  static async interestFilter(query, loggedInId) {
+    const interest = {
+      nature: 1,
+      technology: 2,
+      movies: 3,
+      space: 4,
+      business: 5,
+      travel: 6,
+      health: 9,
+      books: 10,
+      science: 11,
+      fashion: 12,
+    };
+
+    if (query.interests) {
+      return query.interests.map((val) => interest[val.toLowerCase()]);
+    } else if (
+      query.filter === "random" ||
+      loggedInId.requestContext.authorizer === undefined
+    ) {
+      return Object.values(randomize(interest));
+    } else {
       const userInterest = await userInterestModel.findAll({
         where: {
-          userId: id,
+          userId: loggedInId.requestContext.authorizer.lambda.id,
         },
         include: [
           {
@@ -41,47 +125,13 @@ class FeedController {
           followers: val.interest.followers,
         };
       });
-      const sortedInterestData = Object.fromEntries(
-        Object.entries(interestData).sort(([, a], [, b]) => {
-          return a.followers - b.followers;
-        })
+      return Object.keys(
+        Object.fromEntries(
+          Object.entries(interestData).sort((a, b) => a.followers - b.followers)
+        )
       );
-      const questionObject = await questions.findAll({
-        offset: 0,
-        limit: 10,
-        include: [
-          {
-            model: interestModel,
-            attributes: ["id", "name"],
-            where: {
-              id: Object.keys(sortedInterestData),
-            },
-          },
-          {
-            model: userModel,
-            attributes: ["id", "name", "profilePic"],
-          },
-        ],
-      });
-
-      let feedData = [];
-
-      for(let i =0 ; i < questionObject.length; i++){
-        let localQuestion = {};
-        localQuestion.id = questionObject[i].id;
-        localQuestion.question = questionObject[i].question;
-        localQuestion.userId = questionObject[i].user.id;
-        localQuestion.userName = questionObject[i].user.name;
-        localQuestion.profilePic = questionObject[i].user.profilePic;
-        const meta = await this.metaData(questionObject[i]);
-        localQuestion = {...localQuestion , ...meta}
-        feedData.push(localQuestion);
-      }
-      return responseTemplate(200, true, "user Feed", feedData)
-    } catch (error) {
-      return responseTemplate(400, false, ` ${error.message}`, []);
     }
-  };
+  }
 
   static async metaData(data) {
     let localAnswers = await answers.count({
@@ -99,6 +149,7 @@ class FeedController {
     let localLikes = await likes.count({
       where: {
         typeId: data.id,
+        like: 1,
       },
     });
 

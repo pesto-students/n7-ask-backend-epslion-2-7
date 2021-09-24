@@ -72,7 +72,7 @@ module.exports = (sql, Sequelize) => {
     },
     {
       hooks: {
-        afterValidate: function (user) {
+        beforeSave: function (user) {
           user.password = encryptPassword(user.password);
         },
       },

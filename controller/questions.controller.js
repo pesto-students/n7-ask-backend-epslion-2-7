@@ -1,4 +1,4 @@
-const { questions } = require("../model/index");
+const { questions, questionsInterest } = require("../model/index");
 const responseTemplate = require("../util/responseTemplate");
 
 class QuestionsController {
@@ -11,7 +11,7 @@ class QuestionsController {
   static addQuestions = async (req) => {
     try {
       const id = req.requestContext.authorizer.lambda.id;
-      const { question } = JSON.parse(req.body);
+      const { question, interest } = JSON.parse(req.body);
       const questionData = await questions.build({
         userId: id,
         question,
@@ -26,6 +26,11 @@ class QuestionsController {
         return responseTemplate(400, false, ` ${error.message}`, errorResponse);
       }
       await questionData.save();
+      let questionInterest = interest.map((val) => ({
+        questionId: questionData.id,
+        interestId: val,
+      }));
+      await questionsInterest.bulkCreate(questionInterest);
       return responseTemplate(200, true, "Question Added", questionData);
     } catch (error) {
       return responseTemplate(400, false, ` ${error.message}`, []);
