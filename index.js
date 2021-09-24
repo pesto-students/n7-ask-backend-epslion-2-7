@@ -8,11 +8,13 @@ const {
 } = require("./controller/user.controller");
 const { addUserInterests } = require("./controller/interest.controller");
 const { addQuestions } = require("./controller/questions.controller");
+const { search } = require("./controller/search.controller");
 const { addAnswer,getAnswers:getAns } = require("./controller/answers.controller");
 const { addComments,getComments } = require("./controller/comments.controller");
 const { toggleLike } = require("./controller/like.controller");
 const { increaseViewCount } = require("./controller/view.controller");
 const { getFeed } = require("./controller/feed.controller");
+const { reputationCalculation } = require("./controller/reputation.controller");
 const { authentication: auth } = require("./controller/auth.controller");
 
 module.exports.userGet = async function (event) {
@@ -73,4 +75,12 @@ module.exports.getAnswers = async function (event) {
 
 module.exports.userFeed = async function (event) {
   return await getFeed(event);
+};
+
+module.exports.search = async function (event) {
+  return await search(event);
+};
+
+module.exports.reputation = async function (event) {
+  return await reputationCalculation(event);
 };
