@@ -1,6 +1,6 @@
 const db = require("../model/index");
 const { createToken, verifyToken } = require("../service/tokenHandler");
-const { decryptPassword } = require("../util/hashPassword");
+const { decryptPassword, encryptPassword} = require("../util/hashPassword");
 const responseTemplate = require("../util/responseTemplate");
 const UserModel = db.userModel;
 
@@ -70,7 +70,15 @@ class UserController {
       if (!userDetails) {
         return responseTemplate(400, false, "No data found", []);
       }
-      return responseTemplate(200, true, "user data fetched", userDetails);
+      const userData ={
+        "id": userDetails[0].id,
+        "name": userDetails[0].name,
+        "email": userDetails[0].email,
+        "profilePic":  userDetails[0].profilePic,
+        "coverPic": userDetails[0].coverPic,
+        "reputation": userDetails[0].reputation,
+      }
+      return responseTemplate(200, true, "user data fetched", userData);
     } catch (error) {
       return responseTemplate(400, false, error.message, []);
     }
@@ -86,6 +94,9 @@ class UserController {
     try {
       const id = req.requestContext.authorizer.lambda.id;
       const userData = JSON.parse(req.body);
+      if(userData["password"]){
+        delete userData["password"]
+      }
       return UserModel.update(userData, { where: { id } })
         .then((success) => {
           return responseTemplate(200, true, "Data Update", success);
@@ -103,7 +114,7 @@ class UserController {
           );
         });
     } catch (error) {
-      return responseTemplate(400, false, ` ${error.message}`, []);
+      return responseTemplate(400, false, `${error.message}`, []);
     }
   };
 
@@ -169,7 +180,7 @@ class UserController {
 
       return UserModel.update(
         {
-          password: password2,
+          password: encryptPassword(password2),
         },
         {
           where: {

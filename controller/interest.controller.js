@@ -1,4 +1,4 @@
-const { userInterestModel } = require("../model/index");
+const { userInterestModel,interestModel } = require("../model/index");
 const responseTemplate = require("../util/responseTemplate");
 
 class InterestController {
@@ -27,6 +27,9 @@ class InterestController {
       const interestDetails = await userInterestModel.bulkCreate(
         selectedInterest
       );
+      for(let i=0; i<requestBody.length;i++){
+        await interestModel.increment('followers', { by: 1, where: { id:requestBody[i]}})
+      }
       return responseTemplate(200, true, "Interest Added", interestDetails);
     } catch (error) {
       return responseTemplate(400, false, ` ${error.message}`, []);

@@ -47,7 +47,7 @@ class AnswersController {
      */
     static getAnswers = async (req) => {
         try {
-            const questionId = req.pathParameters.id
+            const questionId = req.pathParameters.questionId
             const answerData = await answers.findAll({
                 where:{
                     questionId

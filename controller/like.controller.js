@@ -27,7 +27,6 @@ class LikeController {
           return responseTemplate(200, true, "Data Update", success);
         })
         .catch((error) => {
-          console.log(error);
           return responseTemplate(400, false, ` ${error.message}`, error);
         });
     } catch (error) {

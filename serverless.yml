@@ -23,19 +23,19 @@ provider:
 
   # you can define service wide environment variables here
   environment:
-#    SECRET_KEY: ${file(./envVariables.json):SECRET_KEY}
-#    RDS_DB: ${file(./envVariables.json):RDS_DB}
-#    RDS_PORT: ${file(./envVariables.json):RDS_PORT}
-#    RDS_USERNAME: ${file(./envVariables.json):RDS_USERNAME}
-#    RDS_PASSWORD: ${file(./envVariables.json):RDS_PASSWORD}
-#    RDS_HOSTNAME: ${file(./envVariables.json):RDS_HOSTNAME}
+    SECRET_KEY: ${file(./envProdVariables.json):SECRET_KEY}
+    RDS_DB: ${file(./envProdVariables.json):RDS_DB}
+    RDS_PORT: ${file(./envProdVariables.json):RDS_PORT}
+    RDS_USERNAME: ${file(./envProdVariables.json):RDS_USERNAME}
+    RDS_PASSWORD: ${file(./envProdVariables.json):RDS_PASSWORD}
+    RDS_HOSTNAME: ${file(./envProdVariables.json):RDS_HOSTNAME}
 
-    SECRET_KEY: ${file(./envDevVariables.json):SECRET_KEY}
-    RDS_DB: ${file(./envDevVariables.json):RDS_DB}
-    RDS_PORT: ${file(./envDevVariables.json):RDS_PORT}
-    RDS_USERNAME: ${file(./envDevVariables.json):RDS_USERNAME}
-    RDS_PASSWORD: ${file(./envDevVariables.json):RDS_PASSWORD}
-    RDS_HOSTNAME: ${file(./envDevVariables.json):RDS_HOSTNAME}
+#    SECRET_KEY: ${file(./envDevVariables.json):SECRET_KEY}
+#    RDS_DB: ${file(./envDevVariables.json):RDS_DB}
+#    RDS_PORT: ${file(./envDevVariables.json):RDS_PORT}
+#    RDS_USERNAME: ${file(./envDevVariables.json):RDS_USERNAME}
+#    RDS_PASSWORD: ${file(./envDevVariables.json):RDS_PASSWORD}
+#    RDS_HOSTNAME: ${file(./envDevVariables.json):RDS_HOSTNAME}
 
 functions:
   userCreate:
@@ -91,7 +91,7 @@ functions:
     handler: index.view
     events:
       - httpApi:
-          path: /view
+          path: /viewcount
           method: post
   like:
     handler: index.like
@@ -142,6 +142,22 @@ functions:
       - httpApi:
           path: /feed
           method: get
+          request:
+            querystrings:
+              pageNo: true
+              filter: true
+              interests: true
+
+  search:
+    handler: index.search
+    events:
+      - httpApi:
+          path: /search
+          method: get
+          request:
+            querystrings:
+              q: true
+
 
   authentication:
     handler: index.authentication
