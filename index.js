@@ -9,12 +9,22 @@ const {
 const { addUserInterests } = require("./controller/interest.controller");
 const { addQuestions } = require("./controller/questions.controller");
 const { search } = require("./controller/search.controller");
-const { addAnswer,getAnswers:getAns } = require("./controller/answers.controller");
-const { addComments,getComments } = require("./controller/comments.controller");
+const {
+  addAnswer,
+  getAnswers: getAns,
+} = require("./controller/answers.controller");
+const {
+  addComments,
+  getComments,
+} = require("./controller/comments.controller");
 const { toggleLike } = require("./controller/like.controller");
 const { increaseViewCount } = require("./controller/view.controller");
 const { getFeed } = require("./controller/feed.controller");
 const { reputationCalculation } = require("./controller/reputation.controller");
+const {
+  getExpertsList,
+  getExpertsQuestions,
+} = require("./controller/askAnExpert.controller");
 const { authentication: auth } = require("./controller/auth.controller");
 
 module.exports.userGet = async function (event) {
@@ -83,4 +93,12 @@ module.exports.search = async function (event) {
 
 module.exports.reputation = async function (event) {
   return await reputationCalculation(event);
+};
+
+module.exports.expertList = async function (event) {
+  return await getExpertsList(event);
+};
+
+module.exports.expertQuestions = async function (event) {
+  return await getExpertsQuestions(event);
 };

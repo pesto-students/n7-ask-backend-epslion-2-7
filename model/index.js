@@ -21,9 +21,21 @@ db.questions.belongsToMany(db.interestModel, {
     through: "questions_interests",
     foreignKey: "questionId",
 });
+
 db.interestModel.belongsToMany(db.questions, {
     through: "questions_interests",
     foreignKey: "interestId",
 });
+
+db.userModel.belongsToMany(db.interestModel, {
+    through: "users_interests",
+    foreignKey: "userId",
+});
+
+db.interestModel.belongsToMany(db.userModel, {
+    through: "users_interests",
+    foreignKey: "interestId",
+});
+
 
 module.exports = db;

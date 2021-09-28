@@ -11,10 +11,11 @@ class QuestionsController {
   static addQuestions = async (req) => {
     try {
       const id = req.requestContext.authorizer.lambda.id;
-      const { question, interest } = JSON.parse(req.body);
+      const { question, interest, expertId } = JSON.parse(req.body);
       const questionData = await questions.build({
         userId: id,
         question,
+        expertId
       });
       try {
         await questionData.validate();

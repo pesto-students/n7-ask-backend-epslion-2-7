@@ -14,6 +14,14 @@ module.exports = (sql, Sequelize) => {
         key: "id",
       },
     },
+    expertId: {
+      type: Sequelize.NUMBER,
+      allowNull: false,
+      references: {
+        model: "users",
+        key: "id",
+      },
+    },
     question: {
       type: Sequelize.STRING,
       allowNull: false,

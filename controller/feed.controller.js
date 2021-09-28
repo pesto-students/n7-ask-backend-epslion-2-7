@@ -11,6 +11,7 @@ const {
 } = require("../model/index");
 const responseTemplate = require("../util/responseTemplate");
 const randomize = require("../util/randomSort");
+const MetaData = require("../util/metaData");
 
 class FeedController {
   /**
@@ -61,7 +62,17 @@ class FeedController {
           id: val.id,
           name: val.name,
         }));
-        const meta = await this.metaData(questionObject[i]);
+        const meta = await MetaData(questionObject[i]);
+        if(req.requestContext.authorizer !== undefined){
+          const like  = await likes.findAll({
+            where: {
+              typeId: questionObject[i].id,
+              userId:req.requestContext.authorizer.lambda.id ,
+              like: 1,
+            },
+          });
+          localQuestion.isUserLiked = like.length > 0;
+        }
         localQuestion = { ...localQuestion, ...meta };
         feedData.push(localQuestion);
       }
@@ -133,38 +144,6 @@ class FeedController {
     }
   }
 
-  static async metaData(data) {
-    let localAnswers = await answers.count({
-      where: {
-        questionId: data.id,
-      },
-    });
-
-    let localComments = await comments.count({
-      where: {
-        typeId: data.id,
-      },
-    });
-
-    let localLikes = await likes.count({
-      where: {
-        typeId: data.id,
-        like: 1,
-      },
-    });
-
-    let localViews = await views.count({
-      where: {
-        typeId: data.id,
-      },
-    });
-    return {
-      answers: localAnswers,
-      comments: localComments,
-      likes: localLikes,
-      views: localViews,
-    };
-  }
 }
 
 module.exports = FeedController;

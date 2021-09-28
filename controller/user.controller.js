@@ -42,11 +42,19 @@ class UserController {
         return responseTemplate(400, false, ` ${error.message}`, errorResponse);
       }
       await userDetails.save();
+      const userData ={
+        "id": userDetails[0].id,
+        "name": userDetails[0].name,
+        "email": userDetails[0].email,
+        "profilePic":  userDetails[0].profilePic,
+        "coverPic": userDetails[0].coverPic,
+        "reputation": userDetails[0].reputation,
+      }
       return responseTemplate(
         200,
         true,
         "user created",
-        `Bearer ${createToken({ id: userDetails.id })}`
+          {token:`Bearer ${createToken({ id: userDetails.id })}`,...userData}
       );
     } catch (error) {
       return responseTemplate(400, false, ` ${error.message}`, []);
@@ -140,11 +148,19 @@ class UserController {
       if (!isVerified) {
         return responseTemplate(401, false, "Invalid Credentials", []);
       }
+      const userData ={
+        "id": userDetails[0].id,
+        "name": userDetails[0].name,
+        "email": userDetails[0].email,
+        "profilePic":  userDetails[0].profilePic,
+        "coverPic": userDetails[0].coverPic,
+        "reputation": userDetails[0].reputation,
+      }
       return responseTemplate(
         200,
         true,
         "Successfully logged in ",
-        `Bearer ${createToken({ id: userDetails[0].id })}`
+          {token:`Bearer ${createToken({ id: userDetails[0].id })}`,...userDetails}
       );
     } catch (error) {
       return responseTemplate(400, false, ` ${error.message}`);
