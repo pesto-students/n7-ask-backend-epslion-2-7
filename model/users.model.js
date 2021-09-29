@@ -18,9 +18,6 @@ module.exports = (sql, Sequelize) => {
             args: 3,
             msg: "Name must be at least 3 characters in length",
           },
-          isAlpha: {
-            msg: "Name should does not contain number or symbol ",
-          },
         },
       },
       email: {

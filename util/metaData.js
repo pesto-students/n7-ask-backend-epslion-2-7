@@ -1,7 +1,7 @@
 const { answers, comments, likes, views } = require("../model/index");
 
-const MetaData = async (data) => {
-  let localAnswers = await answers.count({
+const MetaData = async (data,answerNeed = true) => {
+  let localAnswers = answerNeed && await answers.count({
     where: {
       questionId: data.id,
     },
@@ -25,12 +25,15 @@ const MetaData = async (data) => {
       typeId: data.id,
     },
   });
-  return {
+
+  let returnData = {
     answers: localAnswers,
     comments: localComments,
     likes: localLikes,
     views: localViews,
-  };
+  }
+  if(!answerNeed) delete returnData['answers']
+  return returnData
 };
 
 module.exports=MetaData

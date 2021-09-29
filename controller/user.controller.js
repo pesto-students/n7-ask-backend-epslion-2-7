@@ -43,12 +43,12 @@ class UserController {
       }
       await userDetails.save();
       const userData ={
-        "id": userDetails[0].id,
-        "name": userDetails[0].name,
-        "email": userDetails[0].email,
-        "profilePic":  userDetails[0].profilePic,
-        "coverPic": userDetails[0].coverPic,
-        "reputation": userDetails[0].reputation,
+        "id": userDetails.id,
+        "name": userDetails.name,
+        "email": userDetails.email,
+        "profilePic":  userDetails.profilePic,
+        "coverPic": userDetails.coverPic,
+        "reputation": userDetails.reputation,
       }
       return responseTemplate(
         200,
@@ -160,7 +160,7 @@ class UserController {
         200,
         true,
         "Successfully logged in ",
-          {token:`Bearer ${createToken({ id: userDetails[0].id })}`,...userDetails}
+          {token:`Bearer ${createToken({ id: userDetails[0].id })}`,...userData}
       );
     } catch (error) {
       return responseTemplate(400, false, ` ${error.message}`);
