@@ -14,6 +14,8 @@ db.questionsInterest = require("./questionsInterest.model")(dbConfig, Sequelize)
 db.views = require("./views.model")(dbConfig, Sequelize);
 
 db.questions.belongsTo(db.userModel, {foreignKey: 'userId', targetKey: 'id'})
+db.answers.belongsTo(db.userModel, {foreignKey: 'userId', targetKey: 'id'})
+db.comments.belongsTo(db.userModel, {foreignKey: 'userId', targetKey: 'id'})
 db.userInterestModel.belongsTo(db.userModel, {foreignKey: 'userId', targetKey: 'id'})
 db.userInterestModel.belongsTo(db.interestModel, {foreignKey: 'interestId', targetKey: 'id'})
 

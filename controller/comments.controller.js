@@ -1,4 +1,4 @@
-const { comments, likes } = require("../model/index");
+const { comments, likes, userModel } = require("../model/index");
 const responseTemplate = require("../util/responseTemplate");
 const MetaData = require("../util/metaData");
 
@@ -44,11 +44,19 @@ class CommentsController {
   static getComments = async (req) => {
     try {
       const typeId = req.pathParameters.id
+      const type = req.pathParameters.type
       const commentData = await comments.findAll({
         where: {
           typeId,
+          type
         },
         order: [["createdAt", "DESC"]],
+        include: [
+          {
+            model: userModel,
+            attributes: ["id", "name", "profilePic"],
+          },
+        ],
       });
       let feedData = [];
       for (let i = 0; i < commentData.length; i++) {
@@ -56,6 +64,8 @@ class CommentsController {
         localComment.id = commentData[i].id;
         localComment.comment = commentData[i].comment;
         localComment.userId = commentData[i].userId;
+        localComment.userName = commentData[i].user.name;
+        localComment.profilePic = commentData[i].user.profilePic;
         const meta = await MetaData(commentData[i], false);
         localComment = { ...localComment, ...meta };
         feedData.push(localComment);

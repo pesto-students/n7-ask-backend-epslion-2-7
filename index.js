@@ -5,9 +5,12 @@ const {
   getUserDetails,
   creatUserDetails,
   updateUserDetails,
+  getUserAnswers,
+  getUserComments,
+  getUserQuestions,
 } = require("./controller/user.controller");
 const { addUserInterests } = require("./controller/interest.controller");
-const { addQuestions } = require("./controller/questions.controller");
+const { addQuestions,getQuestions } = require("./controller/questions.controller");
 const { search } = require("./controller/search.controller");
 const {
   addAnswer,
@@ -38,6 +41,15 @@ module.exports.userUpdate = async function (event) {
 module.exports.userCreate = async function (event) {
   return await creatUserDetails(event);
 };
+module.exports.userAnswers = async function (event) {
+  return await getUserAnswers(event);
+};
+module.exports.userQuestions = async function (event) {
+  return await getUserQuestions(event);
+};
+module.exports.userComments = async function (event) {
+  return await getUserComments(event);
+};
 
 module.exports.resetPassword = async function (event) {
   return await resetUserPassword(event);
@@ -57,6 +69,10 @@ module.exports.authentication = async function (event) {
 
 module.exports.questionCreate = async function (event) {
   return await addQuestions(event);
+};
+
+module.exports.getQuestion = async function (event) {
+  return await getQuestions(event);
 };
 
 module.exports.view = async function (event) {

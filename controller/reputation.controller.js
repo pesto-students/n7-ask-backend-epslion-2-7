@@ -7,6 +7,7 @@ class ReputationController {
     const allLikes = await likes.count({
       where: {
         typeId,
+        type,
         like: 1,
       },
     });

@@ -58,6 +58,38 @@ functions:
       - httpApi:
           path: /user
           method: get
+  
+  userAnswers:
+    handler: index.userAnswers
+    events:
+      - httpApi:
+          path: /userAnswers
+          method: get
+  
+  userQuestions:
+    handler: index.userQuestions
+    events:
+      - httpApi:
+          path: /userQuestions
+          method: get
+  
+  userComments:
+    handler: index.userComments
+    events:
+      - httpApi:
+          path: /userComments
+          method: get
+
+  getQuestion:
+    handler: index.getQuestion
+    events:
+      - httpApi:
+          path: /question/{questionId}
+          method: get
+          request:
+            parameters:
+              paths:
+                questionId: true
 
   login:
     handler: index.login
@@ -93,6 +125,7 @@ functions:
       - httpApi:
           path: /viewcount
           method: post
+  
   like:
     handler: index.like
     events:
@@ -129,12 +162,13 @@ functions:
     handler: index.getComment
     events:
       - httpApi:
-          path: /comments/{id}
+          path: /comments/{id}/{type}
           method: get
           request:
             parameters:
               paths:
                 id: true
+                type: true
 
   expertList:
     handler: index.expertList

@@ -1,4 +1,4 @@
-const { answers, comments } = require("../model/index");
+const { answers, comments, userModel } = require("../model/index");
 const responseTemplate = require("../util/responseTemplate");
 const MetaData = require("../util/metaData");
 
@@ -48,6 +48,12 @@ class AnswersController {
           questionId,
         },
         order: [["createdAt", "DESC"]],
+        include: [
+          {
+            model: userModel,
+            attributes: ["id", "name", "profilePic"],
+          },
+        ],
       });
       let feedData = [];
       for (let i = 0; i < answerData.length; i++) {
@@ -55,6 +61,8 @@ class AnswersController {
         localComment.id = answerData[i].id;
         localComment.answer = answerData[i].answer;
         localComment.userId = answerData[i].userId;
+        localComment.userName = answerData[i].user.name;
+        localComment.profilePic = answerData[i].user.profilePic;
         localComment.questionId = answerData[i].questionId;
         const meta = await MetaData(answerData[i], false);
         localComment = { ...localComment, ...meta };

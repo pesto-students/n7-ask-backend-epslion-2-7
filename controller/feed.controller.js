@@ -12,6 +12,7 @@ const {
 const responseTemplate = require("../util/responseTemplate");
 const randomize = require("../util/randomSort");
 const MetaData = require("../util/metaData");
+const { verifyToken } = require("../service/tokenHandler");
 
 class FeedController {
   /**
@@ -30,7 +31,17 @@ class FeedController {
       };
       if (query.hasOwnProperty("page")) params.page = query.page;
       if (query.hasOwnProperty("filter")) params.filter = query.filter;
-      if (query.hasOwnProperty("interests")) params.interests = query.interests;
+      if (query.hasOwnProperty("interests") && query.interests !== undefined) {
+        let interestList = [1, 2, 3, 4, 5, 6, 9, 10, 11, 12]
+        let requestInterests = query.interests.split(",").map(Number);
+        let localList = []
+        requestInterests.map(val => {
+          if(interestList.includes(val)){
+            localList.push(val)
+          }
+        })
+        params.interests = localList.length === 0 ? undefined : localList;
+      }
       let allInterests = await this.interestFilter(params, req);
       const questionObject = await questions.findAll({
         offset: (params.page - 1) * 10,
@@ -63,11 +74,11 @@ class FeedController {
           name: val.name,
         }));
         const meta = await MetaData(questionObject[i]);
-        if(req.requestContext.authorizer !== undefined){
-          const like  = await likes.findAll({
+        if (req.headers.authorization !== undefined) {
+          const like = await likes.findAll({
             where: {
               typeId: questionObject[i].id,
-              userId:req.requestContext.authorizer.lambda.id ,
+              userId: verifyToken(req.headers.authorization.split(" ")[1]).id,
               like: 1,
             },
           });
@@ -109,16 +120,16 @@ class FeedController {
     };
 
     if (query.interests) {
-      return query.interests.map((val) => interest[val.toLowerCase()]);
+      return query.interests
     } else if (
       query.filter === "random" ||
-      loggedInId.requestContext.authorizer === undefined
+      loggedInId.headers.authorization === undefined
     ) {
       return Object.values(randomize(interest));
     } else {
       const userInterest = await userInterestModel.findAll({
         where: {
-          userId: loggedInId.requestContext.authorizer.lambda.id,
+          userId: verifyToken(loggedInId.headers.authorization.split(" ")[1]).id,
         },
         include: [
           {

@@ -51,7 +51,7 @@ class ViewController {
           );
         }
         await viewData.save();
-        return responseTemplate(200, true, "view increased", {viewData,req});
+        return responseTemplate(200, true, "view increased", {viewData});
       }
     } catch (error) {
       return responseTemplate(400, false, ` ${error.message}`, []);
