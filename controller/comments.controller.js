@@ -1,7 +1,7 @@
 const { comments, likes, userModel } = require("../model/index");
 const responseTemplate = require("../util/responseTemplate");
 const MetaData = require("../util/metaData");
-
+const { verifyToken } = require("../service/tokenHandler");
 class CommentsController {
   /**
    * @method
