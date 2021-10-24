@@ -2,6 +2,7 @@ const db = require("../model/index");
 const { createToken, verifyToken } = require("../service/tokenHandler");
 const { decryptPassword, encryptPassword } = require("../util/hashPassword");
 const responseTemplate = require("../util/responseTemplate");
+const MetaData = require("../util/metaData")
 const UserModel = db.userModel;
 const likes = db.likes;
 const comments = db.comments;
@@ -127,6 +128,7 @@ class UserController {
           const like = await likes.findAll({
             where: {
               typeId: answerData[i].id,
+              type:"answer",
               userId: id,
               like: 1,
             },
@@ -177,6 +179,7 @@ class UserController {
           const like = await likes.findAll({
             where: {
               typeId: questionObject[i].id,
+              type:"question",
               userId: id,
               like: 1,
             },
@@ -224,6 +227,7 @@ class UserController {
             where: {
               typeId: commentsData[i].id,
               userId: id,
+              type:"comment",
               like: 1,
             },
           });

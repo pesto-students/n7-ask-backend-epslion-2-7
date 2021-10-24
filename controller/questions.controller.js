@@ -74,6 +74,7 @@ class QuestionsController {
           const like = await likes.findAll({
             where: {
               typeId: questionObject[i].id,
+              type:"question",
               userId: verifyToken(req.headers.authorization.split(" ")[1]).id,
               like: 1,
             },

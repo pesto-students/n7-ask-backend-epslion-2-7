@@ -1,7 +1,7 @@
-const { answers, comments, userModel } = require("../model/index");
+const { answers, comments, userModel, likes } = require("../model/index");
 const responseTemplate = require("../util/responseTemplate");
 const MetaData = require("../util/metaData");
-
+const { verifyToken } = require("../service/tokenHandler");
 class AnswersController {
   /**
    * @method
@@ -65,6 +65,17 @@ class AnswersController {
         localComment.profilePic = answerData[i].user.profilePic;
         localComment.questionId = answerData[i].questionId;
         const meta = await MetaData(answerData[i], false);
+        if (req.headers.authorization !== undefined) {
+          const like = await likes.findAll({
+            where: {
+              typeId: answerData[i].id,
+              type:"answer",
+              userId: verifyToken(req.headers.authorization.split(" ")[1]).id,
+              like: 1,
+            },
+          });
+          localComment.isUserLiked = like.length > 0;
+        }
         localComment = { ...localComment, ...meta };
         feedData.push(localComment);
       }

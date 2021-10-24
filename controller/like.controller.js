@@ -16,6 +16,7 @@ class LikeController {
         .findOrCreate({
           where: {
             typeId,
+            type,
           },
           defaults: {
             userId: id,

@@ -67,6 +67,17 @@ class CommentsController {
         localComment.userName = commentData[i].user.name;
         localComment.profilePic = commentData[i].user.profilePic;
         const meta = await MetaData(commentData[i], false);
+        if (req.headers.authorization !== undefined) {
+          const like = await likes.findAll({
+            where: {
+              typeId: commentData[i].id,
+              type:"comment",
+              userId: verifyToken(req.headers.authorization.split(" ")[1]).id,
+              like: 1,
+            },
+          });
+          localComment.isUserLiked = like.length > 0;
+        }
         localComment = { ...localComment, ...meta };
         feedData.push(localComment);
       }

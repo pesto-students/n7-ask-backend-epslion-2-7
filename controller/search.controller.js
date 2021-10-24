@@ -2,7 +2,7 @@ const { questions, interestModel, userModel, answers, comments, likes, views} = 
 const responseTemplate = require("../util/responseTemplate");
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
-
+const { verifyToken } = require("../service/tokenHandler");
 class SearchController {
   static search = async (req) => {
     try {
@@ -45,6 +45,17 @@ class SearchController {
           name: val.name,
         }));
         const meta = await this.metaData(questionObject[i]);
+        if (req.headers.authorization !== undefined) {
+          const like = await likes.findAll({
+            where: {
+              typeId: questionObject[i].id,
+              type:"question",
+              userId: verifyToken(req.headers.authorization.split(" ")[1]).id,
+              like: 1,
+            },
+          });
+          localQuestion.isUserLiked = like.length > 0;
+        }
         localQuestion = { ...localQuestion, ...meta };
         feedData.push(localQuestion);
       }
