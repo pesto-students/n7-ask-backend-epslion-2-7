@@ -118,7 +118,7 @@ class UserController {
       for (let i = 0; i < answerData.length; i++) {
         let localAnswer = {};
         localAnswer.id = answerData[i].id;
-        localAnswer.answer = answerData[i].comment;
+        localAnswer.answer = answerData[i].answer;
         localAnswer.userId = answerData[i].userId;
         localAnswer.userName = answerData[i].user.name;
         localAnswer.profilePic = answerData[i].user.profilePic;
@@ -216,7 +216,7 @@ class UserController {
       for (let i = 0; i < commentsData.length; i++) {
         let localAnswer = {};
         localAnswer.id = commentsData[i].id;
-        localAnswer.answer = commentsData[i].comment;
+        localAnswer.comment = commentsData[i].comment;
         localAnswer.userId = commentsData[i].userId;
         localAnswer.userName = commentsData[i].user.name;
         localAnswer.profilePic = commentsData[i].user.profilePic;
