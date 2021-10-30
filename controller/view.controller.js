@@ -13,7 +13,7 @@ class ViewController {
       const { typeId, type } = JSON.parse(req.body);
       const viewRow = await views.findAll({
         where: {
-          typeId,
+          typeId,type
         },
       });
       if (viewRow.length > 0) {

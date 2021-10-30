@@ -12,24 +12,51 @@ class LikeController {
     try {
       const id = req.requestContext.authorizer.lambda.id;
       const { type, typeId, like } = JSON.parse(req.body);
-      return likes
-        .findOrCreate({
-          where: {
-            typeId,
-            type,
-          },
-          defaults: {
-            userId: id,
-            type,
-            like,
-          },
-        })
-        .then((success) => {
-          return responseTemplate(200, true, "Data Update", success);
-        })
-        .catch((error) => {
-          return responseTemplate(400, false, ` ${error.message}`, error);
+      const likeRow = await likes.findAll({
+        where: {
+          typeId,type,userId:id
+        },
+      });
+      if (likeRow.length > 0) {
+        return likes
+          .update(
+            {
+              like,
+            },
+            { where: { typeId, type,userId:id } }
+          )
+          .then((success) => {
+            return responseTemplate(200, true, "Data Update", success);
+          })
+          .catch((error) => {
+            return responseTemplate(400, false, ` ${error.message}`, error);
+          });
+      } else {
+        const likeData = await likes.build({
+          userId: id,
+          type,
+          like,
+          typeId,
         });
+        try {
+          await likeData.validate();
+        }
+        catch (error) {
+          let errorResponse = error.errors.map((val) => ({
+            field: val.path,
+            message: val.message,
+          }));
+          return responseTemplate(
+            400,
+            false,
+            ` ${error.message}`,
+            errorResponse
+          );
+        }
+        await likeData.save();
+        return responseTemplate(200, true, "Like updated", likeData);
+      }
+
     } catch (error) {
       return responseTemplate(400, false, ` ${error.message}`, []);
     }
