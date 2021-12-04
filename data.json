@@ -1,0 +1,11 @@
+{
+  "queryStringParameters": {
+    "page": 1,
+    "filter": null,
+    "interests": "1"
+  },
+  "headers": {
+    "authorization": "token"
+  },
+  "requestContext": { "authorizer": { "lambda": { "id": 45 } } }
+}
