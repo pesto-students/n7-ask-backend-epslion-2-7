@@ -1,6 +1,6 @@
 # Ask
 
-Ask is An application where users have a centralized platform where they can ask queries on any topic. The goal of our application is to find out an expert for your queries in that specific subject. Questions are directed towards experts in that field. When knowledge is put into Ask, it is there forever to be shared with anyone in the future who is interested.
+Ask is an application where users have a centralized platform where they can ask queries on any topic. The goal of our application is to find out an expert for your queries in that specific subject. Questions are directed towards experts in that field. When knowledge is put into Ask, it is there forever to be shared with anyone in the future who is interested.
 
 <br/>
 
@@ -41,7 +41,7 @@ For User
 - Fork or directly clone this repository to your local machine
 - Make sure [Serverless](https://www.serverless.com/framework/docs/getting-started) is installed in your system
 - Use the `npm` command to install dependencies
-- Locate serverless.yml file and check all the function name for the next step. Make sure you have dummy request object which can be found in data.json, replace request object with dummy data.
+- Locate serverless.yml file and check all the function name to run it locally. Make sure you have dummy request object which can be found in data.json, replace request object with dummy data.
 - For payload reference check this postman collection [Api-Document](https://go.postman.co/workspace/My-Workspace~32d66cca-ddd9-4314-88c9-a44796f696f0/collection/9042497-505643eb-da78-4657-befe-d5df6690c338)
 - Use the `serverless invoke local --function <lambda function name>` to locally run the application
 - Database connection is live on AWS.
