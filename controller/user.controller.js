@@ -170,9 +170,20 @@ class UserController {
         localQuestion.userId = questionObject[i].user.id;
         localQuestion.userName = questionObject[i].user.name;
         localQuestion.profilePic = questionObject[i].user.profilePic;
-        localQuestion.interests = questionObject[i].interests.map((val) => ({
-          id: val.id,
-          name: val.name,
+        const questionInterests = await questionsInterest.findAll({
+          where: {
+            questionId: localQuestion.id,
+          },
+          include: [
+            {
+              model: interestModel,
+              attributes: ["id", "name"],
+            },
+          ],
+        });
+        localQuestion.interests = questionInterests.map((val) => ({
+          id: val.interest.id,
+          name: val.interest.name,
         }));
         const meta = await MetaData(questionObject[i]);
         if (req.headers.authorization !== undefined) {

@@ -32,20 +32,21 @@ class FeedController {
       if (query.hasOwnProperty("page")) params.page = query.page;
       if (query.hasOwnProperty("filter")) params.filter = query.filter;
       if (query.hasOwnProperty("interests") && query.interests !== undefined) {
-        let interestList = [1, 2, 3, 4, 5, 6, 9, 10, 11, 12]
+        let interestList = [1, 2, 3, 4, 5, 6, 9, 10, 11, 12];
         let requestInterests = query.interests.split(",").map(Number);
-        let localList = []
-        requestInterests.map(val => {
-          if(interestList.includes(val)){
-            localList.push(val)
+        let localList = [];
+        requestInterests.map((val) => {
+          if (interestList.includes(val)) {
+            localList.push(val);
           }
-        })
+        });
         params.interests = localList.length === 0 ? undefined : localList;
       }
       let allInterests = await this.interestFilter(params, req);
       const questionObject = await questions.findAll({
         offset: (params.page - 1) * 10,
         limit: 10,
+        order: [["createdAt", "DESC"]],
         include: [
           {
             model: interestModel,
@@ -69,16 +70,28 @@ class FeedController {
         localQuestion.userId = questionObject[i].user.id;
         localQuestion.userName = questionObject[i].user.name;
         localQuestion.profilePic = questionObject[i].user.profilePic;
-        localQuestion.interests = questionObject[i].interests.map((val) => ({
-          id: val.id,
-          name: val.name,
+
+        const questionInterests = await questionsInterest.findAll({
+          where: {
+            questionId: localQuestion.id,
+          },
+          include: [
+            {
+              model: interestModel,
+              attributes: ["id", "name"],
+            },
+          ],
+        });
+        localQuestion.interests = questionInterests.map((val) => ({
+          id: val.interest.id,
+          name: val.interest.name,
         }));
         const meta = await MetaData(questionObject[i]);
         if (req.headers.authorization !== undefined) {
           const like = await likes.findAll({
             where: {
               typeId: questionObject[i].id,
-              type:"question",
+              type: "question",
               userId: verifyToken(req.headers.authorization.split(" ")[1]).id,
               like: 1,
             },
@@ -121,7 +134,7 @@ class FeedController {
     };
 
     if (query.interests) {
-      return query.interests
+      return query.interests;
     } else if (
       query.filter === "random" ||
       loggedInId.headers.authorization === undefined
@@ -130,7 +143,8 @@ class FeedController {
     } else {
       const userInterest = await userInterestModel.findAll({
         where: {
-          userId: verifyToken(loggedInId.headers.authorization.split(" ")[1]).id,
+          userId: verifyToken(loggedInId.headers.authorization.split(" ")[1])
+            .id,
         },
         include: [
           {
@@ -155,7 +169,6 @@ class FeedController {
       );
     }
   }
-
 }
 
 module.exports = FeedController;
