@@ -9,6 +9,7 @@ const comments = db.comments;
 const answers = db.answers;
 const questions = db.questions;
 const interestModel = db.interestModel
+const questionsInterest = db.questionsInterest
 
 class UserController {
   /**

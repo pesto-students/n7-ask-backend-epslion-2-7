@@ -1,4 +1,4 @@
-const { questions, interestModel, userModel, answers, comments, likes, views} = require("../model/index");
+const { questions, interestModel, userModel, answers, questionsInterest,comments, likes, views} = require("../model/index");
 const responseTemplate = require("../util/responseTemplate");
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;

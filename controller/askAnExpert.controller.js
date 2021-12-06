@@ -1,4 +1,4 @@
-const { userModel, interestModel, questions, likes} = require("../model/index");
+const { userModel, interestModel, questions, likes,questionsInterest} = require("../model/index");
 const responseTemplate = require("../util/responseTemplate");
 const MetaData = require("../util/metaData");
 
