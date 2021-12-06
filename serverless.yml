@@ -1,0 +1,224 @@
+# Welcome to Serverless!
+#
+# This file is the main config file for your service.
+# It's very minimal at this point and uses default values.
+# You can always add more config options for more control.
+# We've included some commented out config examples here.
+# Just uncomment any of them to get that config option.
+#
+# For full config options, check the docs:
+#    docs.serverless.com
+#
+# Happy Coding!
+
+service: lambda-epsilon-signup-signin
+
+frameworkVersion: "2"
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  lambdaHashingVersion: 20201221
+  region: ap-south-1
+
+  # you can define service wide environment variables here
+  environment:
+    SECRET_KEY: ${file(./envProdVariables.json):SECRET_KEY}
+    RDS_DB: ${file(./envProdVariables.json):RDS_DB}
+    RDS_PORT: ${file(./envProdVariables.json):RDS_PORT}
+    RDS_USERNAME: ${file(./envProdVariables.json):RDS_USERNAME}
+    RDS_PASSWORD: ${file(./envProdVariables.json):RDS_PASSWORD}
+    RDS_HOSTNAME: ${file(./envProdVariables.json):RDS_HOSTNAME}
+
+#    SECRET_KEY: ${file(./envDevVariables.json):SECRET_KEY}
+#    RDS_DB: ${file(./envDevVariables.json):RDS_DB}
+#    RDS_PORT: ${file(./envDevVariables.json):RDS_PORT}
+#    RDS_USERNAME: ${file(./envDevVariables.json):RDS_USERNAME}
+#    RDS_PASSWORD: ${file(./envDevVariables.json):RDS_PASSWORD}
+#    RDS_HOSTNAME: ${file(./envDevVariables.json):RDS_HOSTNAME}
+
+functions:
+  userCreate:
+    handler: index.userCreate
+    events:
+      - httpApi:
+          path: /user
+          method: post
+
+  userUpdate:
+    handler: index.userUpdate
+    events:
+      - httpApi:
+          path: /user
+          method: patch
+
+  userGet:
+    handler: index.userGet
+    events:
+      - httpApi:
+          path: /user
+          method: get
+  
+  userAnswers:
+    handler: index.userAnswers
+    events:
+      - httpApi:
+          path: /userAnswers
+          method: get
+  
+  userQuestions:
+    handler: index.userQuestions
+    events:
+      - httpApi:
+          path: /userQuestions
+          method: get
+  
+  userComments:
+    handler: index.userComments
+    events:
+      - httpApi:
+          path: /userComments
+          method: get
+
+  getQuestion:
+    handler: index.getQuestion
+    events:
+      - httpApi:
+          path: /question/{questionId}
+          method: get
+          request:
+            parameters:
+              paths:
+                questionId: true
+
+  login:
+    handler: index.login
+    events:
+      - httpApi:
+          path: /login
+          method: post
+
+  interests:
+    handler: index.interests
+    events:
+      - httpApi:
+          path: /interests
+          method: post
+
+  resetPassword:
+    handler: index.resetPassword
+    events:
+      - httpApi:
+          path: /resetpassword
+          method: post
+
+  questionCreate:
+    handler: index.questionCreate
+    events:
+      - httpApi:
+          path: /question
+          method: post
+
+  view:
+    handler: index.view
+    events:
+      - httpApi:
+          path: /viewcount
+          method: post
+  
+  like:
+    handler: index.like
+    events:
+      - httpApi:
+          path: /like
+          method: post
+
+  CreateAnswer:
+    handler: index.createAnswer
+    events:
+      - httpApi:
+          path: /answer
+          method: post
+
+  GetAnswer:
+    handler: index.getAnswers
+    events:
+      - httpApi:
+          path: /answers/{questionId}
+          method: get
+          request:
+            parameters:
+              paths:
+                questionId: true
+
+  CreateComment:
+    handler: index.createComment
+    events:
+      - httpApi:
+          path: /comment
+          method: post
+
+  GetComment:
+    handler: index.getComment
+    events:
+      - httpApi:
+          path: /comments/{id}/{type}
+          method: get
+          request:
+            parameters:
+              paths:
+                id: true
+                type: true
+
+  expertList:
+    handler: index.expertList
+    events:
+      - httpApi:
+          path: /experts
+          method: get
+
+  expertQuestions:
+    handler: index.expertQuestions
+    events:
+      - httpApi:
+          path: /expertquestions
+          method: get
+
+  userFeed:
+    handler: index.userFeed
+    events:
+      - httpApi:
+          path: /feed
+          method: get
+          request:
+            querystrings:
+              pageNo: true
+              filter: true
+              interests: true
+
+  search:
+    handler: index.search
+    events:
+      - httpApi:
+          path: /search
+          method: get
+          request:
+            querystrings:
+              q: true
+              page: true
+
+  reputation:
+    handler: index.reputation
+    events:
+      - httpApi:
+          path: /reputation
+          method: post
+
+  authentication:
+    handler: index.authentication
+
+
+#          request:
+#            parameters:
+#              paths:
+#                id: true
