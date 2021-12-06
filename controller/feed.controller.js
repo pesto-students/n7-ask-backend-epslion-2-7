@@ -44,8 +44,8 @@ class FeedController {
       }
       let allInterests = await this.interestFilter(params, req);
       const questionObject = await questions.findAll({
-        offset: (params.page - 1) * 10,
-        limit: 10,
+        // offset: (params.page - 1) * 10,
+        // limit: 10,
         order: [["createdAt", "DESC"]],
         include: [
           {

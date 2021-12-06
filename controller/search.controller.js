@@ -18,8 +18,8 @@ class SearchController {
         where: {
           question: { [Op.like]: `%${params.q}%` },
         },
-        offset: (params.page-1) * 10 ,
-        limit: 10,
+        // offset: (params.page-1) * 10 ,
+        // limit: 10,
         include: [
           {
             model: interestModel,
