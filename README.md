@@ -4,7 +4,7 @@ Ask is an application where users have a centralized platform where they can ask
 
 <br/>
 
-# Table of Content
+# Table of Contents
 
 1. [Demo](#demo)
 2. [Installation](#installation)
@@ -64,6 +64,7 @@ We have used Serverless framework for application and database. Serverless archi
 # Authors
 
 - [Nikhil Kumar](https://github.com/nk900600)
+- [Aditya Kumar](https://github.com/aditya-maker)
 
 <br/>
 
